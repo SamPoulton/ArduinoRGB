@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{280C5882-1846-4D78-AE2D-0D36884EB963}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>ArduinoRGBLib</RootNamespace>
-    <AssemblyName>ArduinoRGBLib</AssemblyName>
+    <ProjectGuid>{1DA2B6DE-CE07-4EEF-8009-19DFDB8D0A10}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ArduinoRGBTest</RootNamespace>
+    <AssemblyName>ArduinoRGBTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,24 +40,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication.cs" />
-    <Compile Include="Exceptions.cs" />
-    <Compile Include="RGBDevice.cs" />
-    <Compile Include="RgbDeviceManager.cs" />
-    <Compile Include="RgbStates.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ArduinoRGBConfig.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <ProjectReference Include="..\ArduinoRGBService\ArduinoRGBLib.csproj">
+      <Project>{280c5882-1846-4d78-ae2d-0d36884eb963}</Project>
+      <Name>ArduinoRGBLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

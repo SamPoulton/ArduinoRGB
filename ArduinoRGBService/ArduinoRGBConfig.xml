@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <Devices>
+    <Device>
+      <Name>Test Device</Name>
+      <Port>COM1</Port>
+      <BaudRate>115200</BaudRate>
+    </Device>
+  </Devices>
+</Config>

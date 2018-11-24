@@ -9,17 +9,19 @@ namespace ArduinoRGBLib
     {
         private readonly SerialPort Port = new SerialPort();
         public List<RgbEndpoint> Endpoints = new List<RgbEndpoint>();
-        public string DeviceName;
+        public readonly string DeviceName;
 
 
         public RgbDevice(XmlNode root)
         {
             // interpret xml data
             try
-            {
+            { 
                 Port.PortName = root.SelectSingleNode("./Port").InnerText;
                 DeviceName = root.SelectSingleNode("./Name").InnerText;
                 Port.BaudRate = int.Parse(root.SelectSingleNode("./BaudRate").InnerText);
+                Port.ReadTimeout = 500;
+                Port.Open();
             }
             catch (Exception ex) when (ex is NullReferenceException || ex is FormatException) {
                 throw new Exceptions.InvalidConfigException();
@@ -27,11 +29,14 @@ namespace ArduinoRGBLib
             // actually communicate with the device
 
             SendMessage(new InitialiseCommMessage().ToString());
-            if (Port.ReadTo(";") != "OK") throw new Exceptions.NotADeviceException(); 
+            string response = ReceiveMessage();
+            
+            if (response != "OK") throw new Exceptions.NotADeviceException(); 
             
             // get the endpoints from the device
             SendMessage(new GetEndpointsMessage());
-            string message = Port.ReadTo(";");
+            string message = ReceiveMessage();
+
             foreach (string device in message.Split(','))
             {
                 Endpoints.Add(new RgbEndpoint(device.Replace(";",""), this));
@@ -45,7 +50,26 @@ namespace ArduinoRGBLib
 
         public void SendMessage(string message)
         {
-            Port.Write(message);
+            try
+            {
+                Port.Write(message + ";");
+            }
+            catch (InvalidOperationException)
+            {
+                throw new Exceptions.DeviceDisconnectedException();
+            }
+        }
+
+        public string ReceiveMessage()
+        {
+            try
+            {
+                return Port.ReadTo(";");
+            }
+            catch (TimeoutException)
+            {
+                throw new Exceptions.DeviceDisconnectedException();
+            }
         }
     }
 
