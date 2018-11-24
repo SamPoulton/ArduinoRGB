@@ -89,9 +89,12 @@ namespace ArduinoRGBLib
             }
         }
 
-        public RgbEndpoint(string name, RgbDevice parent)
+        public RgbEndpoint(string name_index, RgbDevice parent)
         {
-            Name = name;
+            string[] separated = name_index.Split("&".ToCharArray());
+
+        Index = int.Parse(separated[0]);
+            Name = separated[1];
             Parent = parent;
         }
 
