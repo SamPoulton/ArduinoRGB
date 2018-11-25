@@ -11,8 +11,7 @@ String buffer = "";
 
 bool isGradient = false;
 
-// true means hue is going from 1 to 2
-bool gradientDirection = false;
+bool gradientDirection = false; // true means hue is going from 1 to 2
 
 
 int red, green, blue, hue1, hue2, sat, lum;
@@ -37,7 +36,21 @@ void parseInstruction(String data) {
 	}
 	else if (data[0] == (char)2) {
 		if (data[1] == 0) {
-			setLedRgb(StrToHex(data.substring(2, 3).toCharArray), StrToHex(data.substring(4, 5).toCharArray), StrToHex(data.substring(6, 7).toCharArray));
+			char redStr[2], greenStr[2], blueStr[2];
+			data.substring(2, 3).toCharArray(redStr, 2);
+			data.substring(4, 5).toCharArray(greenStr, 2);
+			data.substring(6, 7).toCharArray(blueStr, 2);
+			setLedRgb(StrToHex(redStr), StrToHex(greenStr), StrToHex(blueStr));
+			isGradient = false;
+		}
+		else if (data[1] == 1) {
+			char hue1Str[2], hue2Str[2], satStr[2], lumStr[2];
+			data.substring(2, 3).toCharArray(hue1Str, 2);
+			data.substring(4, 5).toCharArray(hue2Str, 2);
+			data.substring(6, 7).toCharArray(satStr, 2);
+			data.substring(8, 9).toCharArray(lumStr, 2);
+			setLedHsl(StrToHex(hue1Str), StrToHex(satStr), StrToHex(lumStr));
+			isGradient = true;
 		}
 	}
 }
@@ -95,7 +108,8 @@ void setLedHsl(byte h, byte s, byte v) {
 void loop() {
 	while (Serial.available() > 0) {
 		buffer += Serial.read();
-		if (buffer.charAt(buffer.length - 1) == ';') {
+		if (buffer.charAt(buffer.length() - 1) == ';') {
+			char bufferChar[99];
 			parseInstruction(buffer);
 			buffer = "";
 			break;
