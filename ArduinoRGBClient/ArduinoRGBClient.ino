@@ -1,5 +1,5 @@
 #include <String.h>
-const int BAUD_RATE = 115200;
+const int BAUD_RATE = 9600;
 const char DEVICE_NAME[] = "Test Device";
 const char ENDPOINT_NAME[] = "Test Header";
 
@@ -7,7 +7,34 @@ const int RED_PIN = 9;
 const int GREEN_PIN = 10;
 const int BLUE_PIN = 11;
 
-String buffer = "";
+//debug leds
+class debugLed {
+  private:
+  int pin;
+  bool isOn;
+
+  public:
+  void toggle() {
+    if (isOn) {
+      digitalWrite(pin, LOW);
+      isOn = false;
+    } else {
+      digitalWrite(pin, HIGH);
+      isOn = true;
+    }
+  }
+  debugLed(int pin) {
+	  this->pin = pin;
+	  this->isOn = false;
+  }
+};
+
+debugLed redLed(2);
+debugLed yellowLed(3);
+debugLed greenLed(4);
+debugLed blueLed(5);
+
+String dataBuffer = "";
 
 bool isGradient = false;
 
@@ -24,26 +51,53 @@ int StrToHex(char str[])
 
 void setup() {
 	Serial.begin(BAUD_RATE);
+  Serial.setTimeout(100);
 }
 
 void parseInstruction(String data) {
-	if (data[0] == (char)0) {
-		Serial.write("OK;");
+  Serial.print("Instruction type is ");
+  Serial.println(data[0]);
+	if (data[0] == '0') {
+		Serial.print("OK;");
+		redLed.toggle();
 	}
-	else if (data[0] == (char)1) {
-		Serial.write(ENDPOINT_NAME);
-		Serial.write("&0;");
+	else if (data[0] == '1') {
+		Serial.print(ENDPOINT_NAME);
+		Serial.print("&0;");
+		yellowLed.toggle();
 	}
-	else if (data[0] == (char)2) {
-		if (data[1] == 0) {
-			char redStr[2], greenStr[2], blueStr[2];
-			data.substring(2, 3).toCharArray(redStr, 2);
-			data.substring(4, 5).toCharArray(greenStr, 2);
-			data.substring(6, 7).toCharArray(blueStr, 2);
-			setLedRgb(StrToHex(redStr), StrToHex(greenStr), StrToHex(blueStr));
+	else if (data[0] == '2') {
+		if (data[1] == '0') {
+			char redStr[3], greenStr[3], blueStr[3];
+			data.substring(2, 4).toCharArray(redStr, 3);
+			data.substring(4, 6).toCharArray(greenStr, 3);
+			data.substring(6, 8).toCharArray(blueStr, 3);
+
+      int redValue = StrToHex(redStr);
+      int greenValue = StrToHex(greenStr);
+      int blueValue = StrToHex(blueStr);
+      
+			setLedRgb(redValue, greenValue, blueValue);
 			isGradient = false;
+     
+      Serial.print("Red: 0x");
+      Serial.print(redStr);
+      Serial.print(", equiv to ");
+      Serial.println(redValue);
+      
+      Serial.print("Green: 0x");
+      Serial.print(greenStr);
+      Serial.print(", equiv to ");
+      Serial.println(greenValue);
+
+      Serial.print("Blue: 0x");
+      Serial.print(blueStr);
+      Serial.print(", equiv to ");
+      Serial.println(blueValue);
+      
+      
 		}
-		else if (data[1] == 1) {
+		else if (data[1] == '1') {
 			char hue1Str[2], hue2Str[2], satStr[2], lumStr[2];
 			data.substring(2, 3).toCharArray(hue1Str, 2);
 			data.substring(4, 5).toCharArray(hue2Str, 2);
@@ -52,16 +106,28 @@ void parseInstruction(String data) {
 			setLedHsl(StrToHex(hue1Str), StrToHex(satStr), StrToHex(lumStr));
 			isGradient = true;
 		}
+		greenLed.toggle();
 	}
 }
 
-void setLedRgb(int red, int green, int blue) {
-	analogWrite(RED_PIN, red);
-	analogWrite(GREEN_PIN, green);
-	analogWrite(BLUE_PIN, blue);
+void setLedRgb(int inred, int ingreen, int inblue) {
+  red = inred;
+  green = ingreen;
+  blue = inblue;
+	analogWrite(RED_PIN, inred);
+	analogWrite(GREEN_PIN, ingreen);
+	analogWrite(BLUE_PIN, inblue);
+
+  Serial.print("Written tuple ");
+  Serial.print(inred);
+  Serial.print(", ");
+  Serial.print(ingreen);
+  Serial.print(", ");
+  Serial.println(inblue);
 }
 
 void setLedHsl(byte h, byte s, byte v) {
+  
 	unsigned int i = h / 32;   // We want a value of 0 thru 5
 	unsigned int f = (h % 32) * 8;   // 'fractional' part of 'i' 0..248 in jumps
 
@@ -106,16 +172,16 @@ void setLedHsl(byte h, byte s, byte v) {
 }
 
 void loop() {
-	while (Serial.available() > 0) {
-		buffer += Serial.read();
-		if (buffer.charAt(buffer.length() - 1) == ';') {
-			char bufferChar[99];
-			parseInstruction(buffer);
-			buffer = "";
-			break;
+	if (Serial.available()) {
+    blueLed.toggle();
+		dataBuffer += Serial.readString();
+    Serial.println("Buffer = '" + dataBuffer + "'");
+		if (dataBuffer.charAt(dataBuffer.length() - 1) == ';') {
+      Serial.println("Processing instruction '" + dataBuffer + "'");
+			parseInstruction(dataBuffer);
+			dataBuffer = "";
 		}
 	}
-
 	if (isGradient) {
 		if (gradientDirection) {
 			if (hue1 > hue2) {
@@ -128,5 +194,6 @@ void loop() {
 		currenthue += 0.1;
 		setLedHsl(currenthue, sat, lum);	
 	}
-	delay(10);
+  blueLed.toggle();
+	delay(100);
 }
