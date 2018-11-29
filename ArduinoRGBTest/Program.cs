@@ -15,6 +15,7 @@ namespace ArduinoRGBTest
             foreach (RgbDevice dev in RgbDeviceManager.Devices)
             {
                 Console.WriteLine(dev.DeviceName);
+                dev.Endpoints[0].SetLedState(new UpdateLedStaticMessage(255, 255, 255));
             }
         }
     }

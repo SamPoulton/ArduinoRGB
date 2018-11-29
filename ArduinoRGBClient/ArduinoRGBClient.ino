@@ -55,8 +55,8 @@ void setup() {
 }
 
 void parseInstruction(String data) {
-  Serial.print("Instruction type is ");
-  Serial.println(data[0]);
+ // Serial.print("Instruction type is ");
+//  Serial.println(data[0]);
 	if (data[0] == '0') {
 		Serial.print("OK;");
 		redLed.toggle();
@@ -69,9 +69,9 @@ void parseInstruction(String data) {
 	else if (data[0] == '2') {
 		if (data[1] == '0') {
 			char redStr[3], greenStr[3], blueStr[3];
-			data.substring(2, 4).toCharArray(redStr, 3);
-			data.substring(4, 6).toCharArray(greenStr, 3);
-			data.substring(6, 8).toCharArray(blueStr, 3);
+			data.substring(3, 5).toCharArray(redStr, 3);
+			data.substring(5, 7).toCharArray(greenStr, 3);
+			data.substring(7, 9).toCharArray(blueStr, 3);
 
       int redValue = StrToHex(redStr);
       int greenValue = StrToHex(greenStr);
@@ -79,7 +79,7 @@ void parseInstruction(String data) {
       
 			setLedRgb(redValue, greenValue, blueValue);
 			isGradient = false;
-     
+     /*
       Serial.print("Red: 0x");
       Serial.print(redStr);
       Serial.print(", equiv to ");
@@ -94,8 +94,8 @@ void parseInstruction(String data) {
       Serial.print(blueStr);
       Serial.print(", equiv to ");
       Serial.println(blueValue);
-      
-      
+      */
+      Serial.print("OK;");
 		}
 		else if (data[1] == '1') {
 			char hue1Str[2], hue2Str[2], satStr[2], lumStr[2];
@@ -118,12 +118,12 @@ void setLedRgb(int inred, int ingreen, int inblue) {
 	analogWrite(GREEN_PIN, ingreen);
 	analogWrite(BLUE_PIN, inblue);
 
-  Serial.print("Written tuple ");
+  /* Serial.print("Written tuple ");
   Serial.print(inred);
   Serial.print(", ");
   Serial.print(ingreen);
   Serial.print(", ");
-  Serial.println(inblue);
+  Serial.println(inblue); */
 }
 
 void setLedHsl(byte h, byte s, byte v) {
@@ -175,9 +175,7 @@ void loop() {
 	if (Serial.available()) {
     blueLed.toggle();
 		dataBuffer += Serial.readString();
-    Serial.println("Buffer = '" + dataBuffer + "'");
 		if (dataBuffer.charAt(dataBuffer.length() - 1) == ';') {
-      Serial.println("Processing instruction '" + dataBuffer + "'");
 			parseInstruction(dataBuffer);
 			dataBuffer = "";
 		}

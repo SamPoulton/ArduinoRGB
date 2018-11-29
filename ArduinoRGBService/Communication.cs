@@ -46,7 +46,7 @@ namespace ArduinoRGBLib
         public readonly byte Red, Green, Blue;
         public override string ToString()
         {
-            return MessageType + "0" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
+            return MessageType + "0%" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
         }
 
         public UpdateLedStaticMessage(byte red, byte green, byte blue)

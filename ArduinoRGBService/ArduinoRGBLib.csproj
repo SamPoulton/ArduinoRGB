@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Communication.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="RGBDevice.cs" />
+    <Compile Include="RgbDevice.cs" />
     <Compile Include="RgbDeviceManager.cs" />
     <Compile Include="RgbStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

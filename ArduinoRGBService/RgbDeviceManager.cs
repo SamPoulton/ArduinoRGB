@@ -10,7 +10,7 @@ namespace ArduinoRGBLib
     public static class RgbDeviceManager
     {
         public const string XmlFilePath = "";
-        public static readonly List<RgbDevice> Devices;
+        public static readonly List<RgbDevice> Devices = new List<RgbDevice>();
         static RgbDeviceManager()
         {
             XmlDocument doc = new XmlDocument();

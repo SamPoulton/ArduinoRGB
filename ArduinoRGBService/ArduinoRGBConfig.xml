@@ -3,8 +3,8 @@
   <Devices>
     <Device>
       <Name>Test Device</Name>
-      <Port>COM1</Port>
-      <BaudRate>115200</BaudRate>
+      <Port>COM5</Port>
+      <BaudRate>9600</BaudRate>
     </Device>
   </Devices>
 </Config>

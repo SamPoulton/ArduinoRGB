@@ -85,7 +85,7 @@ namespace ArduinoRGBLib
             set
             {
                 _state = value;
-                Parent.SendMessage(Index + value.GetMessageOut());
+                SetLedState(value.GetMessageOut());
             }
         }
 
@@ -93,14 +93,14 @@ namespace ArduinoRGBLib
         {
             string[] separated = name_index.Split("&".ToCharArray());
 
-        Index = int.Parse(separated[0]);
-            Name = separated[1];
+            Index = int.Parse(separated[1]);
+            Name = separated[0];
             Parent = parent;
         }
 
         public void SetLedState(MessageOut msg)
         {
-            Parent.SendMessage(Index + msg);
+            Parent.SendMessage(msg.ToString().Replace("%", Index.ToString()));
         }
     }
 }
