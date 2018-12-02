@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Xml;
 
@@ -11,20 +12,24 @@ namespace ArduinoRGBLib
         public List<RgbEndpoint> Endpoints = new List<RgbEndpoint>();
         public readonly string DeviceName;
 
-
         public RgbDevice(XmlNode root)
         {
             // interpret xml data
             try
-            { 
+            {
                 Port.PortName = root.SelectSingleNode("./Port").InnerText;
                 DeviceName = root.SelectSingleNode("./Name").InnerText;
                 Port.BaudRate = int.Parse(root.SelectSingleNode("./BaudRate").InnerText);
                 Port.ReadTimeout = 500;
                 Port.Open();
             }
-            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException) {
+            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException)
+            {
                 throw new Exceptions.InvalidConfigException();
+            }
+            catch (IOException)
+            {
+                throw new Exceptions.DeviceDisconnectedException();
             }
             // actually communicate with the device
 
@@ -44,7 +49,7 @@ namespace ArduinoRGBLib
 
             foreach (RgbEndpoint endpoint in Endpoints)
             {
-                endpoint.State = new States.Solid(255, 127, 0, endpoint);
+                endpoint.State = new States.Solid(255, 255, 255, endpoint);
             }
         }
 

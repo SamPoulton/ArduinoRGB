@@ -69,9 +69,9 @@ void parseInstruction(String data) {
 	else if (data[0] == '2') {
 		if (data[1] == '0') {
 			char redStr[3], greenStr[3], blueStr[3];
-			data.substring(3, 5).toCharArray(redStr, 3);
-			data.substring(5, 7).toCharArray(greenStr, 3);
-			data.substring(7, 9).toCharArray(blueStr, 3);
+			data.substring(2, 4).toCharArray(redStr, 3);
+			data.substring(4, 6).toCharArray(greenStr, 3);
+			data.substring(6, 8).toCharArray(blueStr, 3);
 
       int redValue = StrToHex(redStr);
       int greenValue = StrToHex(greenStr);

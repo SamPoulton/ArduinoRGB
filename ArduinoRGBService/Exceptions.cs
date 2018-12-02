@@ -7,5 +7,6 @@ namespace ArduinoRGBLib
         public class InvalidConfigException : Exception { }
         public class NotADeviceException : Exception { }
         public class DeviceDisconnectedException : Exception { };
+        public class NoConfigException : Exception { };
     }
 }
