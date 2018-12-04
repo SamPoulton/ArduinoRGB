@@ -8,7 +8,7 @@
 //      Gradient: 21
 
 
-namespace ArduinoRGBLib
+namespace LuminanceLib
 {
     public abstract class MessageOut
     {

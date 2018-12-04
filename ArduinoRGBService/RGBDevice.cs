@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Xml;
 
-namespace ArduinoRGBLib
+namespace LuminanceLib
 {
     public class RgbDevice
     {

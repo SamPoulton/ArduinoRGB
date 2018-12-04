@@ -13,10 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ArduinoRGBLib;
-using ArduinoRGBLib.Exceptions;
+using LuminanceLib;
+using LuminanceLib.Exceptions;
 
-namespace ArduinoRGBGui
+namespace LuminanceGui
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

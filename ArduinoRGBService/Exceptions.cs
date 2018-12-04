@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ArduinoRGBLib
+namespace LuminanceLib
 {
     namespace Exceptions
     {

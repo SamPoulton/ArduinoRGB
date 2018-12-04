@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="ArduinoRGBGui.StaticEditPanel"
+﻿<UserControl x:Class="LuminanceGui.StaticEditPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ArduinoRGBGui"
+             xmlns:local="clr-namespace:LuminanceGui"
              xmlns:effects="http://gu.se/Geometry"
              mc:Ignorable="d" 
              d:DesignHeight="420" d:DesignWidth="589.6">
@@ -13,10 +13,24 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height ="3*"></RowDefinition>
             <RowDefinition Height ="*"></RowDefinition>
-            <RowDefinition Height ="2*"></RowDefinition>
             <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="3*"></RowDefinition>
         </Grid.RowDefinitions>
-        <local:HsvWheel Grid.Column="1" Grid.RowSpan="3" Padding="5,5,5,5"></local:HsvWheel>
-    </Grid>
+        <local:HsvWheel Grid.Column="1" Grid.RowSpan="5" Padding="5,5,5,5"></local:HsvWheel>
+        <Slider x:Name="RedSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="1" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
+        <Slider x:Name="GreenSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="2" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
+        <Slider x:Name="BlueSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="3" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
+
+        <Label Content="Red" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Green" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Blue" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Foreground="White"/>
+        
+        <TextBox x:Name="RedValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
+        <TextBox x:Name="GreenValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
+        <TextBox x:Name="BlueValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="3" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
+
+</Grid>
 </UserControl>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArduinoRGBGui.Properties
+namespace LuminanceGui.Properties
 {
 
 

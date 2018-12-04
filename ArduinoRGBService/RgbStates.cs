@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace ArduinoRGBLib
+namespace LuminanceLib
 {
     namespace States
     {
