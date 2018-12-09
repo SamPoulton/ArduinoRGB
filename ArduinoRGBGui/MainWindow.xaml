@@ -11,18 +11,25 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="DeviceEntryPanel" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderBrush="{x:Null}" Background="#FF222222" MinWidth="204" Grid.Column="0">
+        <ListBox x:Name="DeviceEntryPanel" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderBrush="{x:Null}" Background="#FF222222" MinWidth="204" Grid.Column="0" SelectionChanged="DeviceEntryPanel_SelectionChanged">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="Height" Value="Auto" />
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-        <TabControl Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}">
+        <TabControl x:Name="MainPanelTab" Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}">
             <TabItem Header="EditPanel" Visibility="Collapsed" Background="{x:Null}" BorderBrush="{x:Null}">
-                <local:StaticEditPanel/>
+                <StackPanel>
+                    <ComboBox Name="StateSelect" SelectionChanged="StateSelect_SelectionChanged" >
+                        <ListBoxItem Content="Static"/>
+                    </ComboBox>
+                    <StackPanel x:Name="EditPanelCanvas">
+                        
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
-            <TabItem Header="MessagePanel" Visibility="Collapsed"/>
+            <TabItem IsSelected="True" Header="MessagePanel" Visibility="Collapsed"/>
             
         </TabControl>
     </Grid>

@@ -6,15 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LuminanceLib;
+using LuminanceLib.States;
 using LuminanceLib.Exceptions;
+using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
 
 namespace LuminanceGui
 {
@@ -23,6 +18,19 @@ namespace LuminanceGui
     /// </summary>
     public partial class MainWindow : Window
     {
+        private RgbEndpoint _endpoint;
+
+        public RgbEndpoint CurrentEndpoint
+        {
+            get => _endpoint;
+            set
+            {
+                _endpoint = value;
+                if (_endpoint.State is Solid)
+                    StateSelect.SelectedIndex = 0;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -55,6 +63,37 @@ namespace LuminanceGui
             catch (NoConfigException)
             {
                 MessageBox.Show(this, "Your configuration file could not be found. The program now must close.", "", MessageBoxButton.OK);
+            }
+        }
+
+        private void DeviceEntryPanel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CurrentEndpoint = ((ListViewEntry) e.AddedItems[0]).Endpoint;
+        }
+
+        private void StateSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ListBoxItem) e.AddedItems[0]).Content.ToString() == "Static")
+            {
+
+                if (CurrentEndpoint.State is Solid)
+                {
+                    // remove all children
+                    while (true)
+                    {
+                        try
+                        {
+                            EditPanelCanvas.Children.RemoveAt(0);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            break;
+                        }
+                    }
+
+                    EditPanelCanvas.Children.Add(new StaticEditPanel((Solid) CurrentEndpoint.State));
+                    MainPanelTab.SelectedIndex = 0;
+                }
             }
         }
     }

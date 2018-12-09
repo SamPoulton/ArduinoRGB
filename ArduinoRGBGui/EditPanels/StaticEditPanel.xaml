@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:LuminanceGui"
-             xmlns:effects="http://gu.se/Geometry"
              mc:Ignorable="d" 
              d:DesignHeight="420" d:DesignWidth="589.6">
     <Grid>
@@ -19,18 +19,18 @@
             <RowDefinition Height ="*"></RowDefinition>
             <RowDefinition Height ="3*"></RowDefinition>
         </Grid.RowDefinitions>
-        <local:HsvWheel Grid.Column="1" Grid.RowSpan="5" Padding="5,5,5,5"></local:HsvWheel>
-        <Slider x:Name="RedSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="1" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
-        <Slider x:Name="GreenSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="2" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
-        <Slider x:Name="BlueSlider" Maximum="255" Margin="100,0,20,0" Grid.Row="3" VerticalAlignment="Center" MinWidth="175" Width="Auto"/>
+        <Slider x:Name="RedSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="1" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState" />
+        <Slider x:Name="GreenSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="2" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
+        <Slider x:Name="BlueSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="3" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
 
         <Label Content="Red" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="White"/>
         <Label Content="Green" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Foreground="White"/>
         <Label Content="Blue" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Foreground="White"/>
-        
-        <TextBox x:Name="RedValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
-        <TextBox x:Name="GreenValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
-        <TextBox x:Name="BlueValue" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="3" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454"/>
 
-</Grid>
+        <TextBox x:Name="RedValue" Width="25.6"  VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=RedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="GreenValue" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=GreenSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="BlueValue" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=BlueSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Rectangle x:Name="ColourPreview"  Grid.RowSpan="3" Grid.Row="1" Grid.Column="1" Margin="10,10,10,10"></Rectangle>
+    </Grid>
 </UserControl>

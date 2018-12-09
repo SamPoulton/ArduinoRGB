@@ -1,4 +1,5 @@
 #include <String.h>
+#include <EEPROM.h>
 const int BAUD_RATE = 9600;
 const char DEVICE_NAME[] = "Test Device";
 const char ENDPOINT_NAME[] = "Test Header";
@@ -7,6 +8,9 @@ const int RED_PIN = 9;
 const int GREEN_PIN = 10;
 const int BLUE_PIN = 11;
 
+const int RED_LOC = 0;
+const int GREEN_LOC = 1;
+const int BLUE_LOC = 2;
 //debug leds
 class debugLed {
   private:
@@ -48,12 +52,9 @@ int StrToHex(char str[])
 {
 	return (int)strtol(str, 0, 16);
 }
-
-void setup() {
-	Serial.begin(BAUD_RATE);
-  Serial.setTimeout(100);
+int StrToInt(char str[]) {
+  return (int)strtol(str, 0, 10);
 }
-
 void parseInstruction(String data) {
  // Serial.print("Instruction type is ");
 //  Serial.println(data[0]);
@@ -63,15 +64,21 @@ void parseInstruction(String data) {
 	}
 	else if (data[0] == '1') {
 		Serial.print(ENDPOINT_NAME);
-		Serial.print("&0;");
+		Serial.print("&0&");
+    Serial.print(EEPROM.read(RED_LOC), HEX);
+    Serial.print("&");
+    Serial.print(EEPROM.read(GREEN_LOC), HEX);
+    Serial.print("&");
+    Serial.print(EEPROM.read(BLUE_LOC), HEX);
+    Serial.print(";");
 		yellowLed.toggle();
 	}
 	else if (data[0] == '2') {
 		if (data[1] == '0') {
 			char redStr[3], greenStr[3], blueStr[3];
-			data.substring(2, 4).toCharArray(redStr, 3);
-			data.substring(4, 6).toCharArray(greenStr, 3);
-			data.substring(6, 8).toCharArray(blueStr, 3);
+			data.substring(3, 5).toCharArray(redStr, 3);
+			data.substring(5, 7).toCharArray(greenStr, 3);
+			data.substring(7, 9).toCharArray(blueStr, 3);
 
       int redValue = StrToHex(redStr);
       int greenValue = StrToHex(greenStr);
@@ -114,6 +121,9 @@ void setLedRgb(int inred, int ingreen, int inblue) {
   red = inred;
   green = ingreen;
   blue = inblue;
+  EEPROM.write(RED_LOC, red);
+  EEPROM.write(GREEN_LOC, green);
+  EEPROM.write(BLUE_LOC, blue);
 	analogWrite(RED_PIN, inred);
 	analogWrite(GREEN_PIN, ingreen);
 	analogWrite(BLUE_PIN, inblue);
@@ -169,6 +179,12 @@ void setLedHsl(byte h, byte s, byte v) {
 		analogWrite(BLUE_PIN, qv);
 		break;
 	}
+}
+
+void setup() {
+  Serial.begin(BAUD_RATE);
+  Serial.setTimeout(100);
+  setLedRgb(EEPROM.read(RED_LOC), EEPROM.read(GREEN_LOC), EEPROM.read(BLUE_LOC));
 }
 
 void loop() {
