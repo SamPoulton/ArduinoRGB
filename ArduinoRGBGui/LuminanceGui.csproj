@@ -55,9 +55,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EditPanels\GradientEditPanel.xaml.cs">
+      <DependentUpon>GradientEditPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditPanels\StaticEditPanel.xaml.cs">
       <DependentUpon>StaticEditPanel.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditPanels\GradientEditPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ListViewEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

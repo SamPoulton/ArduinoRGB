@@ -23,6 +23,7 @@ namespace LuminanceGui
     /// </summary>
     public partial class StaticEditPanel : UserControl
     {
+        private bool ignoreUpdate = false;
         private LuminanceLib.States.Solid _state;
         public LuminanceLib.States.Solid State
         {
@@ -48,6 +49,17 @@ namespace LuminanceGui
             _state = state;
             RefreshState();
         }
+
+        public StaticEditPanel(Solid state, bool isNewState)
+        {
+            InitializeComponent();
+            _state = state;
+            ignoreUpdate = isNewState;
+            RefreshState();
+            UpdateState();
+            ignoreUpdate = false;
+        }
+
         private void UpdateState()
         {
             State.Red = (byte)RedSlider.Value;
@@ -63,9 +75,12 @@ namespace LuminanceGui
         }
         private void UpdateState(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if ((Slider)e.Source == RedSlider) State.Red = (byte)e.NewValue;
-            else if ((Slider)e.Source == GreenSlider) State.Green = (byte)e.NewValue;
-            else if ((Slider)e.Source == BlueSlider) State.Blue = (byte)e.NewValue;
+            if (!ignoreUpdate)
+            {
+                if ((Slider) e.Source == RedSlider) State.Red = (byte) e.NewValue;
+                else if ((Slider) e.Source == GreenSlider) State.Green = (byte) e.NewValue;
+                else if ((Slider) e.Source == BlueSlider) State.Blue = (byte) e.NewValue;
+            }
             ColourPreview.Fill = new SolidColorBrush(Color.FromRgb((byte)RedSlider.Value, (byte)GreenSlider.Value, (byte)BlueSlider.Value));
         }
     }

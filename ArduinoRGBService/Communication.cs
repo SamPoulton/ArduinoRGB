@@ -64,18 +64,19 @@ namespace LuminanceLib
             get => 2;
         }
 
-        public readonly byte Hue1, Hue2, Saturation, Luminance;
+        public readonly byte Hue1, Hue2, Saturation, Luminance, Speed;
         public override string ToString()
         {
-            return MessageType + "1" + Hue1.ToString("X2") + Hue2.ToString("X2") + Saturation.ToString("X2") + Luminance.ToString("X2");
+            return MessageType + "1%" + Hue1.ToString("X2") + Hue2.ToString("X2") + Saturation.ToString("X2") + Luminance.ToString("X2") + Speed.ToString("X2");
         }
 
-        public UpdateLedGradientMessage(byte hue1, byte hue2, byte saturation, byte luminance)
+        public UpdateLedGradientMessage(byte hue1, byte hue2, byte saturation, byte luminance, byte speed)
         {
             Hue1 = hue1;
             Hue2 = hue2;
             Saturation = saturation;
             Luminance = luminance;
+            Speed = speed;
         }
     }
 }

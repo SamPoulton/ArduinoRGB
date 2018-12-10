@@ -61,7 +61,7 @@ namespace LuminanceLib
 
 
         // GRADIENT
-        // Two hues, one saturation and one luminance. Hues are smoothly faded between by the device.
+        // Two hues, one saturation, one luminance and one speed. Hues are smoothly faded between by the device.
 
         public class Gradient : RgbState
         {
@@ -69,7 +69,8 @@ namespace LuminanceLib
             private byte _hue1;
             private byte _hue2;
             private byte _sat;
-            private byte _lum;
+            private byte _value;
+            private byte _speed;
 
             public byte Hue1
             {
@@ -99,28 +100,39 @@ namespace LuminanceLib
                 }
             }
 
-            public byte Luminance
+            public byte Value
             {
-                get => _lum;
+                get => _value;
                 set
                 {
-                    _lum = value;
+                    _value = value;
                     Parent.SetLedState(GetMessageOut());
                 }
             }
 
-            public Gradient(byte hue1, byte hue2, byte sat, byte lum, RgbEndpoint parent)
+            public byte Speed
+            {
+                get => _speed;
+                set
+                {
+                    _speed = value;
+                    Parent.SetLedState(GetMessageOut());
+                }
+            }
+
+            public Gradient(byte hue1, byte hue2, byte sat, byte value, byte speed, RgbEndpoint parent)
             {
                 _hue1 = hue1;
                 _hue2 = hue2;
                 _sat = sat;
-                _lum = lum;
+                _value = value;
+                _speed = speed;
                 Parent = parent;
             }
 
             public override MessageOut GetMessageOut()
             {
-                return new UpdateLedGradientMessage(Hue1, Hue2, Saturation, Luminance);
+                return new UpdateLedGradientMessage(Hue1, Hue2, Saturation, Value, Speed);
             }
         }
     }

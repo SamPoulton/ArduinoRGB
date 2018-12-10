@@ -23,6 +23,7 @@
                 <StackPanel>
                     <ComboBox Name="StateSelect" SelectionChanged="StateSelect_SelectionChanged" >
                         <ListBoxItem Content="Static"/>
+                        <ListBoxItem Content="Gradient"/>
                     </ComboBox>
                     <StackPanel x:Name="EditPanelCanvas">
                         

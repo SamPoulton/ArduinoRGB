@@ -128,7 +128,20 @@ namespace LuminanceLib
             Index = int.Parse(separated[1]);
             Name = separated[0];
             Parent = parent;
-            _state = new States.Solid(byte.Parse(separated[2],NumberStyles.HexNumber), byte.Parse(separated[3], NumberStyles.HexNumber), byte.Parse(separated[4], NumberStyles.HexNumber), this);
+            switch (separated[2])
+            {
+                case "0":
+                    _state = new States.Solid(byte.Parse(separated[3], NumberStyles.HexNumber), byte.Parse(separated[4], NumberStyles.HexNumber), byte.Parse(separated[5], NumberStyles.HexNumber), this);
+                    break;
+                case "1":
+                    _state = new States.Gradient(byte.Parse(separated[3], NumberStyles.HexNumber), 
+                        byte.Parse(separated[4], NumberStyles.HexNumber), 
+                        byte.Parse(separated[5], NumberStyles.HexNumber),
+                        byte.Parse(separated[6], NumberStyles.HexNumber),
+                        byte.Parse(separated[7], NumberStyles.HexNumber), 
+                        this);
+                    break;
+            }
         }
 
         public void SetLedState(MessageOut msg)

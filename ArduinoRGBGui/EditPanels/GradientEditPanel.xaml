@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="LuminanceGui.GradientEditPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:LuminanceGui"
+             mc:Ignorable="d" 
+             d:DesignHeight="420" d:DesignWidth="589.6">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height ="3*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="*"></RowDefinition>
+            <RowDefinition Height ="3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Slider x:Name="Hue1Slider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="1" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState" />
+        <Slider x:Name="Hue2Slider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="2" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
+        <Slider x:Name="SaturationSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="3" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
+        <Slider x:Name="ValueSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="4" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
+        <Slider x:Name="SpeedSlider" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="255" Margin="100,0,20,0" Grid.Row="5" VerticalAlignment="Center" Width="Auto" ValueChanged="UpdateState"/>
+
+        <Label Content="Hue 1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Hue 2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Satur" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Value" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" VerticalAlignment="Center" Foreground="White"/>
+        <Label Content="Speed" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="5" VerticalAlignment="Center" Foreground="White"/>
+
+        <TextBox x:Name="Hue1Value" Width="25.6"  VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=Hue1Slider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="Hue2Value" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=Hue2Slider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="SaturationValue" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=SaturationSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="ValueValue" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=ValueSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="SpeedValue" Width="25.6" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="18" Margin="54,0,0,0" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="#FF545454" Text="{Binding ElementName=SpeedSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Rectangle x:Name="ColourPreview"  Grid.RowSpan="5" Grid.Row="1" Grid.Column="1" Margin="10,10,10,10"></Rectangle>
+    </Grid>
+</UserControl>
