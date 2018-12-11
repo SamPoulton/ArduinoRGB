@@ -20,6 +20,7 @@ public:
 class rgbEndpoint {
 public:
 	int redPin, greenPin, bluePin, eepromLoc, currenthue;
+	unsigned long lastTime = 0;
 	String endpointName;
 	bool gradientDirection;
 	rgbEndpoint(int redpin, int greenpin, int bluepin, char endpointname[], int memoryOffset) {
@@ -35,17 +36,20 @@ public:
 		}
 	}
 	void tick() {
-		if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 1) {
-			if (gradientDirection) {
-				if (currenthue < EEPROM.read(eepromLoc + memoryOffsets::HUE1_LOC)) gradientDirection = false;
-				else currenthue -= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
-			}
-			else {
-				if (currenthue > EEPROM.read(eepromLoc + memoryOffsets::HUE2_LOC)) gradientDirection = true;
-				else currenthue += EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
-			}
-			setLedHsl(currenthue, EEPROM.read(eepromLoc + memoryOffsets::SAT_LOC), EEPROM.read(eepromLoc + memoryOffsets::VAL_LOC));
-		}
+	  if (millis() - lastTime >= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC)) {
+		  if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 1) {
+		  	if (gradientDirection) {
+	  			if (currenthue < EEPROM.read(eepromLoc + memoryOffsets::HUE1_LOC)) gradientDirection = false;
+  				else currenthue -= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
+  			}
+  			else {
+  				if (currenthue > EEPROM.read(eepromLoc + memoryOffsets::HUE2_LOC)) gradientDirection = true;
+  				else currenthue += EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
+	  		}
+  			setLedHsl(currenthue, EEPROM.read(eepromLoc + memoryOffsets::SAT_LOC), EEPROM.read(eepromLoc + memoryOffsets::VAL_LOC));
+		  }
+		  lastTime = millis();
+	  }
 	}
 	void setLedRgb(byte red, byte green, byte blue) {
 		EEPROM.write(eepromLoc + memoryOffsets::MODE_LOC, 0);
@@ -218,5 +222,4 @@ void loop() {
 	for (int i = 0; i <= 1; i++) {
 		endpoints[i].tick();
 	}
-	delay(50);
 }
