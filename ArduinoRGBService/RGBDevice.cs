@@ -29,6 +29,7 @@ namespace LuminanceLib
                 Port.PortName = root.SelectSingleNode("./Port").InnerText;
                 DeviceName = root.SelectSingleNode("./Name").InnerText;
                 Port.BaudRate = int.Parse(root.SelectSingleNode("./BaudRate").InnerText);
+                Port.Handshake = Handshake.None;
                 Port.ReadTimeout = 500;
                 Port.Open();
             }

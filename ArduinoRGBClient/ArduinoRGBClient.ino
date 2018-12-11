@@ -36,20 +36,20 @@ public:
 		}
 	}
 	void tick() {
-	  if (millis() - lastTime >= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC)) {
-		  if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 1) {
-		  	if (gradientDirection) {
-	  			if (currenthue < EEPROM.read(eepromLoc + memoryOffsets::HUE1_LOC)) gradientDirection = false;
-  				else currenthue -= 1;
-  			}
-  			else {
-  				if (currenthue > EEPROM.read(eepromLoc + memoryOffsets::HUE2_LOC)) gradientDirection = true;
-  				else currenthue += 1;
-	  		}
-  			setLedHsl(currenthue, EEPROM.read(eepromLoc + memoryOffsets::SAT_LOC), EEPROM.read(eepromLoc + memoryOffsets::VAL_LOC));
-		  }
-		  lastTime = millis();
-	  }
+		if (millis() - lastTime >= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC)) {
+			if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 1) {
+				if (gradientDirection) {
+					if (currenthue < EEPROM.read(eepromLoc + memoryOffsets::HUE1_LOC)) gradientDirection = false;
+					else currenthue -= 1;
+				}
+				else {
+					if (currenthue > EEPROM.read(eepromLoc + memoryOffsets::HUE2_LOC)) gradientDirection = true;
+					else currenthue += 1;
+				}
+				setLedHsl(currenthue, EEPROM.read(eepromLoc + memoryOffsets::SAT_LOC), EEPROM.read(eepromLoc + memoryOffsets::VAL_LOC));
+			}
+			lastTime = millis();
+		}
 	}
 	void setLedRgb(byte red, byte green, byte blue) {
 		EEPROM.write(eepromLoc + memoryOffsets::MODE_LOC, 0);
@@ -67,7 +67,7 @@ public:
 		EEPROM.write(eepromLoc + memoryOffsets::HUE2_LOC, hue2);
 		EEPROM.write(eepromLoc + memoryOffsets::SAT_LOC, saturation);
 		EEPROM.write(eepromLoc + memoryOffsets::VAL_LOC, value);
-		EEPROM.write(eepromLoc + memoryOffsets::SPEED_LOC, fadespeed);
+		EEPROM.write(eepromLoc + memoryOffsets::SPEED_LOC, 255 - fadespeed);
 		setLedHsl(hue1, saturation, value);
     currenthue = hue1;
 	}
@@ -120,9 +120,10 @@ public:
 };
 
 rgbEndpoint endpoints[2] = {
-rgbEndpoint(6, 3, 5, "Header 1", 0),
+rgbEndpoint(5, 6, 3, "Header 1", 0),
+// 5, 6, 3
 rgbEndpoint(11, 9, 10, "Header 2", 9) };
-// 11, 9, 10
+// 10, 11, 9
 String dataBuffer = "";
 
 
@@ -157,7 +158,7 @@ void parseInstruction(String data) {
 				Serial.print("&");
 				Serial.print(EEPROM.read(endpoints[i].eepromLoc + memoryOffsets::VAL_LOC), HEX);
 				Serial.print("&");
-				Serial.print(EEPROM.read(endpoints[i].eepromLoc + memoryOffsets::SPEED_LOC), HEX);
+				Serial.print(255 - EEPROM.read(endpoints[i].eepromLoc + memoryOffsets::SPEED_LOC), HEX);
 			}
 			else {
 				Serial.print(0, DEC);
@@ -199,7 +200,7 @@ void parseInstruction(String data) {
 			int hue2Value = StrToHex(hue2Str);
 			int satValue = StrToHex(satStr);
 			int valValue = StrToHex(valStr);
-			int speedValue = StrToHex(speedStr) / 10.0;
+			int speedValue = StrToHex(speedStr);
       if (speedValue ==0) speedValue++;
 			endpoints[endpointIndex].setGradient(hue1Value, hue2Value, satValue, valValue, speedValue);
 			Serial.print("OK;");
