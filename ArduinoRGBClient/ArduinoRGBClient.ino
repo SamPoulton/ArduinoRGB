@@ -40,11 +40,11 @@ public:
 		  if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 1) {
 		  	if (gradientDirection) {
 	  			if (currenthue < EEPROM.read(eepromLoc + memoryOffsets::HUE1_LOC)) gradientDirection = false;
-  				else currenthue -= EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
+  				else currenthue -= 1;
   			}
   			else {
   				if (currenthue > EEPROM.read(eepromLoc + memoryOffsets::HUE2_LOC)) gradientDirection = true;
-  				else currenthue += EEPROM.read(eepromLoc + memoryOffsets::SPEED_LOC);
+  				else currenthue += 1;
 	  		}
   			setLedHsl(currenthue, EEPROM.read(eepromLoc + memoryOffsets::SAT_LOC), EEPROM.read(eepromLoc + memoryOffsets::VAL_LOC));
 		  }
