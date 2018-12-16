@@ -28,6 +28,8 @@ namespace LuminanceGui
                 _endpoint = value;
                 if (value.State is Solid) StateSelect.SelectedIndex = 0;
                 if (value.State is Gradient) StateSelect.SelectedIndex = 1;
+                UpdateSelected();
+
             }
         }
 
@@ -73,7 +75,10 @@ namespace LuminanceGui
 
         private void StateSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // remove all children
+            UpdateSelected();
+        }
+        private void UpdateSelected() { 
+        // remove all children
             while (true)
             {
                 try
@@ -85,7 +90,11 @@ namespace LuminanceGui
                     break;
                 }
             }
-            if (((ListBoxItem) e.AddedItems[0]).Content.ToString() == "Static")
+
+
+            // THE ISSUE:
+
+            if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Static")
             {
                 if (CurrentEndpoint.State is Solid)
                 {
@@ -93,14 +102,16 @@ namespace LuminanceGui
                     MainPanelTab.SelectedIndex = 0;
                 } else if (CurrentEndpoint.State is Gradient)
                 {
-                    EditPanelCanvas.Children.Add(new StaticEditPanel(new Solid(255, 255, 255, CurrentEndpoint), false)); //TODO
+                    CurrentEndpoint.State = new Solid(255,255,255,CurrentEndpoint);
+                    EditPanelCanvas.Children.Add(new StaticEditPanel((Solid)CurrentEndpoint.State, false));
                     MainPanelTab.SelectedIndex = 0;
                 }
-            } else if (((ListBoxItem) e.AddedItems[0]).Content.ToString() == "Gradient")
+            } else if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Gradient")
             {
                  if (CurrentEndpoint.State is Solid)
                 {
-                    EditPanelCanvas.Children.Add(new GradientEditPanel(new Gradient(0, 255, 255, 255, 10, CurrentEndpoint), false));
+                    CurrentEndpoint.State = new Gradient(0, 255, 255, 255, 10, CurrentEndpoint);
+                    EditPanelCanvas.Children.Add(new GradientEditPanel((Gradient)CurrentEndpoint.State, false));
                     MainPanelTab.SelectedIndex = 0;
                 }
                 else if (CurrentEndpoint.State is Gradient)
