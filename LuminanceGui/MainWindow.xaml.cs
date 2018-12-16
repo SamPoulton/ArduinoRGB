@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ArduinoRGBGui;
 using LuminanceLib;
 using LuminanceLib.States;
 using LuminanceLib.Exceptions;
@@ -19,6 +20,7 @@ namespace LuminanceGui
     public partial class MainWindow : Window
     {
         private RgbEndpoint _endpoint;
+        private DeviceManageWindow manageWindow = new DeviceManageWindow();
 
         public RgbEndpoint CurrentEndpoint
         {
@@ -92,9 +94,6 @@ namespace LuminanceGui
                 }
             }
 
-
-            // THE ISSUE:
-
             if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Solid")
             {
                 if (CurrentEndpoint.State is Solid)
@@ -121,6 +120,11 @@ namespace LuminanceGui
                     MainPanelTab.SelectedIndex = 0;
                 }
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            manageWindow.Show();
         }
     }
 }
