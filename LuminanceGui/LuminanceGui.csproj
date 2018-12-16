@@ -58,8 +58,8 @@
     <Compile Include="EditPanels\GradientEditPanel.xaml.cs">
       <DependentUpon>GradientEditPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditPanels\StaticEditPanel.xaml.cs">
-      <DependentUpon>StaticEditPanel.xaml</DependentUpon>
+    <Compile Include="EditPanels\SolidEditPanel.xaml.cs">
+      <DependentUpon>SolidEditPanel.xaml</DependentUpon>
     </Compile>
     <Page Include="EditPanels\GradientEditPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -84,7 +84,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="EditPanels\StaticEditPanel.xaml">
+    <Page Include="EditPanels\SolidEditPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,13 +116,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ColourWheel.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\LuminanceLib\LuminanceLib.csproj">
       <Project>{280c5882-1846-4d78-ae2d-0d36884eb963}</Project>
       <Name>LuminanceLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\ColourWheel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -55,7 +55,7 @@ namespace LuminanceLib
 
             public override MessageOut GetMessageOut()
             {
-                return new UpdateLedStaticMessage(Red, Green, Blue);
+                return new UpdateLedSolidMessage(Red, Green, Blue);
             }
         }
 

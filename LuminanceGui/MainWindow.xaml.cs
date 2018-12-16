@@ -38,8 +38,9 @@ namespace LuminanceGui
             InitializeComponent();
         }
 
-        public void AddItemsToList()
+        public void RefreshListItems()
         {
+            DeviceEntryPanel.Items.Clear();
             try
             {
                 foreach (RgbDevice device in RgbDeviceManager.Devices)
@@ -60,7 +61,7 @@ namespace LuminanceGui
         {
             try
             {
-                AddItemsToList();
+                RefreshListItems();
             }
             catch (NoConfigException)
             {
@@ -94,16 +95,16 @@ namespace LuminanceGui
 
             // THE ISSUE:
 
-            if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Static")
+            if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Solid")
             {
                 if (CurrentEndpoint.State is Solid)
                 {
-                    EditPanelCanvas.Children.Add(new StaticEditPanel((Solid) CurrentEndpoint.State));
+                    EditPanelCanvas.Children.Add(new SolidEditPanel((Solid) CurrentEndpoint.State));
                     MainPanelTab.SelectedIndex = 0;
                 } else if (CurrentEndpoint.State is Gradient)
                 {
                     CurrentEndpoint.State = new Solid(255,255,255,CurrentEndpoint);
-                    EditPanelCanvas.Children.Add(new StaticEditPanel((Solid)CurrentEndpoint.State, false));
+                    EditPanelCanvas.Children.Add(new SolidEditPanel((Solid)CurrentEndpoint.State, false));
                     MainPanelTab.SelectedIndex = 0;
                 }
             } else if (((ListBoxItem)StateSelect.SelectedItem).Content.ToString() == "Gradient")

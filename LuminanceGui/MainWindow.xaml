@@ -22,7 +22,7 @@
             <TabItem Header="EditPanel" Visibility="Collapsed" Background="{x:Null}" BorderBrush="{x:Null}">
                 <StackPanel>
                     <ComboBox Name="StateSelect" SelectionChanged="StateSelect_SelectionChanged" >
-                        <ListBoxItem Content="Static"/>
+                        <ListBoxItem Content="Solid"/>
                         <ListBoxItem Content="Gradient"/>
                     </ComboBox>
                     <StackPanel x:Name="EditPanelCanvas">

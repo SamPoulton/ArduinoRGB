@@ -21,7 +21,7 @@ namespace LuminanceGui
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class StaticEditPanel : UserControl
+    public partial class SolidEditPanel : UserControl
     {
         private bool ignoreUpdate = false;
         private LuminanceLib.States.Solid _state;
@@ -35,7 +35,7 @@ namespace LuminanceGui
             }
         }
 
-        public StaticEditPanel()
+        public SolidEditPanel()
         {
             InitializeComponent();
         }
@@ -43,14 +43,14 @@ namespace LuminanceGui
         public SolidColorBrush CurrentColour =>
             new SolidColorBrush(Color.FromRgb((byte)RedSlider.Value, (byte)GreenSlider.Value, (byte)BlueSlider.Value));
 
-        public StaticEditPanel(Solid state)
+        public SolidEditPanel(Solid state)
         {
             InitializeComponent();
             _state = state;
             RefreshState();
         }
 
-        public StaticEditPanel(Solid state, bool isNewState)
+        public SolidEditPanel(Solid state, bool isNewState)
         {
             InitializeComponent();
             _state = state;

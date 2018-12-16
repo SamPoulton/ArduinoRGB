@@ -4,7 +4,7 @@
 // Initialise: 0
 // Get Endpoints: 1
 // Update State: 2
-//      Static: 20
+//      Solid: 20
 //      Gradient: 21
 
 
@@ -36,7 +36,7 @@ namespace LuminanceLib
         }
     }
 
-    public class UpdateLedStaticMessage : MessageOut
+    public class UpdateLedSolidMessage : MessageOut
     {
         public override int MessageType
         {
@@ -49,7 +49,7 @@ namespace LuminanceLib
             return MessageType + "0%" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
         }
 
-        public UpdateLedStaticMessage(byte red, byte green, byte blue)
+        public UpdateLedSolidMessage(byte red, byte green, byte blue)
         {
             Red = red;
             Green = green;

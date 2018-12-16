@@ -15,14 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ArduinoRGBClient.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="__vm\.ArduinoRGBClient.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="__vm\.LuminanceClient.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LuminanceClient.ino" />
   </ItemGroup>
 </Project>
