@@ -116,7 +116,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArduinoRGBService\LuminanceLib.csproj">
+    <ProjectReference Include="..\LuminanceLib\LuminanceLib.csproj">
       <Project>{280c5882-1846-4d78-ae2d-0d36884eb963}</Project>
       <Name>LuminanceLib</Name>
     </ProjectReference>

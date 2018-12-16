@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceLib", "ArduinoRGBService\LuminanceLib.csproj", "{280C5882-1846-4D78-AE2D-0D36884EB963}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceLib", "LuminanceLib\LuminanceLib.csproj", "{280C5882-1846-4D78-AE2D-0D36884EB963}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceTest", "ArduinoRGBTest\LuminanceTest.csproj", "{1DA2B6DE-CE07-4EEF-8009-19DFDB8D0A10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceTests", "LuminanceTests\LuminanceTests.csproj", "{1DA2B6DE-CE07-4EEF-8009-19DFDB8D0A10}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoRGBClient", "ArduinoRGBClient\ArduinoRGBClient.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuminanceClient", "LuminanceClient\LuminanceClient.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceGui", "ArduinoRGBGui\LuminanceGui.csproj", "{9D063E57-36C9-4A65-B0F7-B56C8C17E942}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminanceGui", "LuminanceGui\LuminanceGui.csproj", "{9D063E57-36C9-4A65-B0F7-B56C8C17E942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
