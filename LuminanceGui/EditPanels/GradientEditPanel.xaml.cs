@@ -174,13 +174,16 @@ namespace LuminanceGui
         }
 
         private void RefreshState()
-        { 
+        {
             Hue1Slider.Value = State.Hue1;
             Hue2Slider.Value = State.Hue2;
             SaturationSlider.Value = State.Saturation;
             ValueSlider.Value = State.Value;
             SpeedSlider.Value = State.Speed;
         }
+
+        private int RangeShift(int input, int startRange, int endRange) => (int)(((double)input / (double)startRange) * endRange);
+
         private void UpdateState(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!ignoreUpdate)
@@ -192,8 +195,19 @@ namespace LuminanceGui
                 else if ((Slider) e.Source == SpeedSlider) State.Speed = (byte) e.NewValue;
             }
 
-            ColourPreview.Fill = new LinearGradientBrush(HsvConverter.HsvToColour(State.Hue1, State.Saturation, State.Value),
-                HsvConverter.HsvToColour(State.Hue2, State.Saturation, State.Value), 90.0);
+            List<GradientStop> stops = new List<GradientStop>();
+            double count = 0.0;
+            for (int currentHue = State.Hue1; 
+                currentHue <= State.Hue2; 
+                currentHue++, count += 1 / (double)(State.Hue2 - State.Hue1))
+            {
+                stops.Add(new GradientStop(HsvConverter.HsvToColour(RangeShift(currentHue + 1, 256, 360) - 1, 
+                    (double)State.Saturation / 255,
+                    (double)State.Value / 255), 
+                    count));
+            }
+            GradientStopCollection collection = new GradientStopCollection(stops);
+            ColourPreview.Fill = new LinearGradientBrush(collection, 0);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace LuminanceGui
             {
                 if (CurrentEndpoint.State is Solid)
                 {
-                    EditPanelCanvas.Children.Add(new SolidEditPanel((Solid) CurrentEndpoint.State));
+                    EditPanelCanvas.Children.Add(new SolidEditPanel((Solid) CurrentEndpoint.State, false));
                     MainPanelTab.SelectedIndex = 0;
                 } else if (CurrentEndpoint.State is Gradient)
                 {
@@ -116,7 +116,7 @@ namespace LuminanceGui
                 }
                 else if (CurrentEndpoint.State is Gradient)
                 {
-                    EditPanelCanvas.Children.Add(new GradientEditPanel((Gradient)CurrentEndpoint.State));
+                    EditPanelCanvas.Children.Add(new GradientEditPanel((Gradient)CurrentEndpoint.State, false));
                     MainPanelTab.SelectedIndex = 0;
                 }
             }
