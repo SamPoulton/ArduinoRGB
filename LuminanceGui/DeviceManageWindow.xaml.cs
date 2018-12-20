@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LuminanceLib;
 
 namespace ArduinoRGBGui
 {
@@ -22,6 +23,11 @@ namespace ArduinoRGBGui
         public DeviceManageWindow()
         {
             InitializeComponent();
+            DeviceList.SetColumnHeaders("Name", "Port", "Endpoints");
+            foreach (RgbDevice device in RgbDeviceManager.Devices)
+            {
+                DeviceList.AddItem(device.DeviceName, device.PortName, device.Endpoints.Count.ToString());
+            }
         }
     }
 }

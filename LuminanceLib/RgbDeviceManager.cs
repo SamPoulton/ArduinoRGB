@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,28 +14,21 @@ namespace LuminanceLib
     {
         public const string XmlFilePath = "";
         public static readonly List<RgbDevice> Devices = new List<RgbDevice>();
+
         static RgbDeviceManager()
         {
 
-            try
+            foreach (string port in SerialPort.GetPortNames())
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(XmlFilePath + "ArduinoRGBConfig.xml");
-                foreach (XmlNode node in doc.SelectNodes("/Config/Devices/Device"))
+                try
                 {
-                    try
-                    {
-                        Devices.Add(new RgbDevice(node));
-                    }
-                    catch (Exceptions.DeviceDisconnectedException)
-                    {
-                        ;
-                    }
+                    Devices.Add(new RgbDevice(port));
                 }
-            }
-            catch (FileNotFoundException)
-            {
-                throw new NoConfigException();
+                catch (Exception e) when (e is Exceptions.DeviceDisconnectedException ||
+                                          e is Exceptions.NotADeviceException)
+                {
+                    ;
+                }
             }
         }
     }

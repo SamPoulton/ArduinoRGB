@@ -120,9 +120,9 @@ public:
 };
 
 rgbEndpoint endpoints[2] = {
-rgbEndpoint(5, 6, 3, "Header 1", 0),
+rgbEndpoint(5, 6, 3, "Pins 5-6-3", 0),
 // 5, 6, 3
-rgbEndpoint(11, 9, 10, "Header 2", 9) };
+rgbEndpoint(11, 9, 10, "Pins 11-9-10", 9) };
 // 10, 11, 9
 String dataBuffer = "";
 
@@ -136,9 +136,15 @@ int StrToInt(char str[]) {
 }
 void parseInstruction(String data) {
 	// Serial.print("Instruction type is ");
-  // Serial.println(data[0]);
+    // Serial.println(data[0]);
 	if (data[0] == '0') {
-		Serial.print("OK;");
+		if (data[1] == '0') {
+			Serial.print("OK;");
+		}
+		else if (data[1] == '1') {
+			Serial.print(DEVICE_NAME);
+			Serial.print(';');
+		}
 	}
 	else if (data[0] == '1') {
 		for (int i = 0; i <= 1; i++) {

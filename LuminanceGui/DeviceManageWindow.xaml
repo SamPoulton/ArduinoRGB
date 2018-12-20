@@ -7,6 +7,20 @@
         mc:Ignorable="d"
         Title="Luminance: Manage Devices" Height="450" Width="800" Background="#FF2E2E2E" Foreground="#FF7C7C7C">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <local:ColumnGroupList x:Name="DeviceList" Background="{x:Null}"/>
+        <Grid Grid.Row="1" Background="#FF222222">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Add Device" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" Padding="10,1"/>
+            <Button Grid.Column="1"  Content="Remove Device" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" Padding="10,1"/>
+            <Button Grid.Column="2"  Content="Edit Device" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" Padding="10,1"/>
+        </Grid>
     </Grid>
 </Window>

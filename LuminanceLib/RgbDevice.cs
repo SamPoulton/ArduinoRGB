@@ -7,6 +7,7 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Xml;
+using LuminanceLib.Exceptions;
 
 namespace LuminanceLib
 {
@@ -18,7 +19,12 @@ namespace LuminanceLib
         private Queue<string> CommandQueue = new Queue<string>(); 
         private Thread CommunicationThread;
 
-        public RgbDevice(XmlNode root)
+        public string PortName
+        {
+            get => Port.PortName;
+        }
+
+        public RgbDevice(string port)
         {
             CommunicationThread = new Thread(UpdateMessageThread);
             CommunicationThread.IsBackground = true;
@@ -26,18 +32,13 @@ namespace LuminanceLib
             // interpret xml data
             try
             {
-                Port.PortName = root.SelectSingleNode("./Port").InnerText;
-                DeviceName = root.SelectSingleNode("./Name").InnerText;
-                Port.BaudRate = int.Parse(root.SelectSingleNode("./BaudRate").InnerText);
+                Port.PortName = port;
+                Port.BaudRate = 9600;
                 Port.Handshake = Handshake.None;
                 Port.ReadTimeout = 500;
                 Port.Open();
             }
-            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException)
-            {
-                throw new Exceptions.InvalidConfigException();
-            }
-            catch (IOException)
+            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException || ex is IOException)
             {
                 throw new Exceptions.DeviceDisconnectedException();
             }
@@ -45,9 +46,12 @@ namespace LuminanceLib
 
             SendMessage(new InitialiseCommMessage().ToString());
             string response = ReceiveMessage();
+
+            if (response != "OK") throw new NotADeviceException();
             
-            if (response != "OK") throw new Exceptions.NotADeviceException(); 
-            
+            SendMessage(new GetNameMessage().ToString());
+            DeviceName = ReceiveMessage();
+
             // get the endpoints from the device
             SendMessage(new GetEndpointsMessage());
             string message = ReceiveMessage();
@@ -80,7 +84,7 @@ namespace LuminanceLib
 
         public string ReceiveMessage()
         {
-            try
+           try
             {
                 return Port.ReadTo(";");
             }

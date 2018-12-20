@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Remoting.Messaging;
+using LuminanceLib;
 
 // MESSAGE TYPES
 // Initialise: 0
@@ -12,8 +13,9 @@ namespace LuminanceLib
 {
     public abstract class MessageOut
     {
-        public abstract int MessageType { get;}
+        public abstract int MessageType { get; }
         public override string ToString() => MessageType.ToString();
+
         public static implicit operator string(MessageOut d)
         {
             return d.ToString();
@@ -26,6 +28,18 @@ namespace LuminanceLib
         {
             get => 0;
         }
+
+        public override string ToString() => "00";
+    }
+
+    public class GetNameMessage : MessageOut
+    {
+        public override int MessageType
+        {
+            get => 0;
+        }
+
+        public override string ToString() => "01";
     }
 
     public class GetEndpointsMessage : MessageOut
@@ -44,6 +58,7 @@ namespace LuminanceLib
         }
 
         public readonly byte Red, Green, Blue;
+
         public override string ToString()
         {
             return MessageType + "0%" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
@@ -65,9 +80,11 @@ namespace LuminanceLib
         }
 
         public readonly byte Hue1, Hue2, Saturation, Luminance, Speed;
+
         public override string ToString()
         {
-            return MessageType + "1%" + Hue1.ToString("X2") + Hue2.ToString("X2") + Saturation.ToString("X2") + Luminance.ToString("X2") + Speed.ToString("X2");
+            return MessageType + "1%" + Hue1.ToString("X2") + Hue2.ToString("X2") + Saturation.ToString("X2") +
+                   Luminance.ToString("X2") + Speed.ToString("X2");
         }
 
         public UpdateLedGradientMessage(byte hue1, byte hue2, byte saturation, byte luminance, byte speed)
