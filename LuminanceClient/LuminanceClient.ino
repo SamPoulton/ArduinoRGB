@@ -1,7 +1,7 @@
 #include <String.h>
 #include <EEPROM.h>
 const int BAUD_RATE = 9600;
-const char DEVICE_NAME[] = "Test Device";
+const char DEVICE_NAME[] = "Test ESP8266";
 
 // EEPROM addresses
 class memoryOffsets {
@@ -120,9 +120,9 @@ public:
 };
 
 rgbEndpoint endpoints[2] = {
-rgbEndpoint(5, 6, 3, "Pins 5-6-3", 0),
+rgbEndpoint(1, 2, 3, "Header 1", 0),
 // 5, 6, 3
-rgbEndpoint(11, 9, 10, "Pins 11-9-10", 9) };
+rgbEndpoint(5, 6, 7, "Header 2", 9) };
 // 10, 11, 9
 String dataBuffer = "";
 

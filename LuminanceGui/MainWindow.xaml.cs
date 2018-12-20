@@ -121,11 +121,5 @@ namespace LuminanceGui
                 }
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            manageWindow = new DeviceManageWindow();
-            manageWindow.ShowDialog();
-        }
     }
 }

@@ -18,7 +18,6 @@
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-        <Button VerticalAlignment="Bottom" Content="Manage Devices" Margin="10,0,10,10" Click="Button_Click"/>
         <TabControl x:Name="MainPanelTab" Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}">
             <TabItem Header="EditPanel" Visibility="Collapsed" Background="{x:Null}" BorderBrush="{x:Null}">
                 <StackPanel>
