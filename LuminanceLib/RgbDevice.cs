@@ -7,11 +7,19 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Xml;
+using AuraSDKDotNet;
 using LuminanceLib.Exceptions;
 
 namespace LuminanceLib
 {
-    public class RgbDevice
+    public abstract class RgbDevice
+    {
+        public List<RgbEndpoint> Endpoints;
+        public readonly string DeviceName;
+        public abstract void SendMessage(MessageOut msg);
+    }
+
+    public class SerialRgbDevice : RgbDevice
     {
         private readonly SerialPort Port = new SerialPort();
         public List<RgbEndpoint> Endpoints = new List<RgbEndpoint>();
@@ -24,7 +32,7 @@ namespace LuminanceLib
             get => Port.PortName;
         }
 
-        public RgbDevice(string port)
+        public SerialRgbDevice(string port)
         {
             CommunicationThread = new Thread(UpdateMessageThread);
             CommunicationThread.IsBackground = true;
@@ -44,12 +52,12 @@ namespace LuminanceLib
             }
             // actually communicate with the device
 
-            SendMessage(new InitialiseCommMessage().ToString());
+            SendMessage(new InitialiseCommMessage());
             string response = ReceiveMessage();
 
             if (response != "OK") throw new NotADeviceException();
             
-            SendMessage(new GetNameMessage().ToString());
+            SendMessage(new GetNameMessage());
             DeviceName = ReceiveMessage();
 
             // get the endpoints from the device
@@ -62,8 +70,9 @@ namespace LuminanceLib
             }
         }
 
-        public void SendMessage(string message)
+        public override void SendMessage(MessageOut _message)
         {
+            string message = _message.ToString();
             try
             {
                 if (message[0] == '2')
@@ -151,7 +160,7 @@ namespace LuminanceLib
 
         public void SetLedState(MessageOut msg)
         {
-            Parent.SendMessage(msg.ToString().Replace("%", Index.ToString()));
+            Parent.SendMessage(msg);
         }
     }
 }

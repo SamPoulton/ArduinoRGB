@@ -1,4 +1,6 @@
-﻿using System.Runtime.Remoting.Messaging;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Messaging;
 using LuminanceLib;
 
 // MESSAGE TYPES
@@ -15,7 +17,7 @@ namespace LuminanceLib
     {
         public abstract int MessageType { get; }
         public override string ToString() => MessageType.ToString();
-
+        public abstract int EndpointIndex { get; set; }
         public static implicit operator string(MessageOut d)
         {
             return d.ToString();
@@ -24,6 +26,8 @@ namespace LuminanceLib
 
     public class InitialiseCommMessage : MessageOut
     {
+        public override int EndpointIndex { get => 0; set { }}
+
         public override int MessageType
         {
             get => 0;
@@ -34,6 +38,7 @@ namespace LuminanceLib
 
     public class GetNameMessage : MessageOut
     {
+        public override int EndpointIndex { get => 0; set { } }
         public override int MessageType
         {
             get => 0;
@@ -44,6 +49,7 @@ namespace LuminanceLib
 
     public class GetEndpointsMessage : MessageOut
     {
+        public override int EndpointIndex { get => 0; set { } }
         public override int MessageType
         {
             get => 1;
@@ -52,6 +58,7 @@ namespace LuminanceLib
 
     public class UpdateLedSolidMessage : MessageOut
     {
+        public override int EndpointIndex { get; set; }
         public override int MessageType
         {
             get => 2;
@@ -64,16 +71,18 @@ namespace LuminanceLib
             return MessageType + "0%" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
         }
 
-        public UpdateLedSolidMessage(byte red, byte green, byte blue)
+        public UpdateLedSolidMessage(byte red, byte green, byte blue, int endpoint)
         {
             Red = red;
             Green = green;
             Blue = blue;
+            EndpointIndex = endpoint;
         }
     }
 
     public class UpdateLedGradientMessage : MessageOut
     {
+        public override int EndpointIndex { get; set; }
         public override int MessageType
         {
             get => 2;
@@ -87,13 +96,14 @@ namespace LuminanceLib
                    Luminance.ToString("X2") + Speed.ToString("X2");
         }
 
-        public UpdateLedGradientMessage(byte hue1, byte hue2, byte saturation, byte luminance, byte speed)
+        public UpdateLedGradientMessage(byte hue1, byte hue2, byte saturation, byte luminance, byte speed, int endpoint)
         {
             Hue1 = hue1;
             Hue2 = hue2;
             Saturation = saturation;
             Luminance = luminance;
             Speed = speed;
+            EndpointIndex = endpoint;
         }
     }
 }

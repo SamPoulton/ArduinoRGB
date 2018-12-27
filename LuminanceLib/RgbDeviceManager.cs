@@ -22,7 +22,7 @@ namespace LuminanceLib
             {
                 try
                 {
-                    Devices.Add(new RgbDevice(port));
+                    Devices.Add(new SerialRgbDevice(port));
                 }
                 catch (Exception e) when (e is Exceptions.DeviceDisconnectedException ||
                                           e is Exceptions.NotADeviceException)

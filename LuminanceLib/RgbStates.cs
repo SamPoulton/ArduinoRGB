@@ -55,7 +55,7 @@ namespace LuminanceLib
 
             public override MessageOut GetMessageOut()
             {
-                return new UpdateLedSolidMessage(Red, Green, Blue);
+                return new UpdateLedSolidMessage(Red, Green, Blue, Parent.Index);
             }
         }
 
@@ -132,7 +132,7 @@ namespace LuminanceLib
 
             public override MessageOut GetMessageOut()
             {
-                return new UpdateLedGradientMessage(Hue1, Hue2, Saturation, Value, Speed);
+                return new UpdateLedGradientMessage(Hue1, Hue2, Saturation, Value, Speed, Parent.Index);
             }
         }
     }

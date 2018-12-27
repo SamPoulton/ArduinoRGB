@@ -20,7 +20,6 @@ namespace LuminanceGui
     public partial class MainWindow : Window
     {
         private RgbEndpoint _endpoint;
-        private DeviceManageWindow manageWindow = new DeviceManageWindow();
 
         public RgbEndpoint CurrentEndpoint
         {
