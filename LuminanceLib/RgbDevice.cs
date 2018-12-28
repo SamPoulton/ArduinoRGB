@@ -7,7 +7,6 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Xml;
-using AuraSDKDotNet;
 using LuminanceLib.Exceptions;
 
 namespace LuminanceLib
