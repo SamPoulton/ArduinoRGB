@@ -13,23 +13,16 @@ namespace LuminanceLib
 {
     public abstract class RgbDevice
     {
-        public List<RgbEndpoint> Endpoints;
-        public readonly string DeviceName;
-        public abstract void SendMessage(MessageOut msg);
+        public List<RgbEndpoint> Endpoints = new List<RgbEndpoint>();
+        public string DeviceName;
+        public abstract void SendMessage(string msg);
     }
 
     public class SerialRgbDevice : RgbDevice
     {
         private readonly SerialPort Port = new SerialPort();
-        public List<RgbEndpoint> Endpoints = new List<RgbEndpoint>();
-        public readonly string DeviceName;
         private Queue<string> CommandQueue = new Queue<string>(); 
         private Thread CommunicationThread;
-
-        public string PortName
-        {
-            get => Port.PortName;
-        }
 
         public SerialRgbDevice(string port)
         {
@@ -63,19 +56,19 @@ namespace LuminanceLib
             SendMessage(new GetEndpointsMessage());
             string message = ReceiveMessage();
 
-            foreach (string device in message.Split(','))
+            foreach (string endpoint in message.Split(','))
             {
-                Endpoints.Add(new RgbEndpoint(device.Replace(";",""), this));
+                Endpoints.Add(new RgbEndpoint(endpoint.Replace(";",""), this));
             }
         }
 
-        public override void SendMessage(MessageOut _message)
+        public override void SendMessage(string message)
         {
-            string message = _message.ToString();
             try
             {
                 if (message[0] == '2')
                 {
+                    Console.WriteLine("Sending message " + message + "to port " + Port.PortName);
                     CommandQueue.Enqueue(message);
                 }
                 else
@@ -159,7 +152,7 @@ namespace LuminanceLib
 
         public void SetLedState(MessageOut msg)
         {
-            Parent.SendMessage(msg);
+            Parent.SendMessage(msg.ToString().Replace("%", Index.ToString()));
         }
     }
 }
