@@ -52,7 +52,6 @@
     <Compile Include="RgbDevice.cs" />
     <Compile Include="RgbDeviceManager.cs" />
     <Compile Include="RgbStates.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -61,6 +60,9 @@
     <Content Include="ArduinoRGBConfig.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -36,15 +36,25 @@ namespace LuminanceLib
                 Port.BaudRate = 9600;
                 Port.Handshake = Handshake.None;
                 Port.ReadTimeout = 500;
+                Port.WriteTimeout = 500;
                 Port.Open();
             }
-            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException || ex is IOException)
+            catch (Exception ex) when (ex is NullReferenceException || ex is FormatException || ex is IOException || ex is UnauthorizedAccessException)
             {
                 throw new Exceptions.DeviceDisconnectedException();
+                Port.Close();
             }
             // actually communicate with the device
 
-            SendMessage(new InitialiseCommMessage());
+            try
+            {
+                SendMessage(new InitialiseCommMessage());
+            }
+            catch (TimeoutException)
+            {
+                throw new Exceptions.NotADeviceException();
+            }
+
             string response = ReceiveMessage();
 
             if (response != "OK") throw new NotADeviceException();
@@ -104,8 +114,16 @@ namespace LuminanceLib
                 {
                     while (CommandQueue.Count > 1) CommandQueue.Dequeue();
                     Port.Write(CommandQueue.Dequeue() + ";");
-                    ReceiveMessage();
+                    try
+                    {
+                        ReceiveMessage();
+                    }
+                    catch (Exception)
+                    {
+                        ;
+                    }
                 }
+
                 Thread.Sleep(10);
             }
         }
@@ -117,6 +135,7 @@ namespace LuminanceLib
         public int Index;
         private States.RgbState _state;
         public readonly RgbDevice Parent;
+        public readonly bool IsAddressable;
         public States.RgbState State
         {
             get => _state;
@@ -134,17 +153,18 @@ namespace LuminanceLib
             Index = int.Parse(separated[1]);
             Name = separated[0];
             Parent = parent;
-            switch (separated[2])
+            IsAddressable = "1" == separated[2];
+            switch (separated[3])
             {
                 case "0":
-                    _state = new States.Solid(byte.Parse(separated[3], NumberStyles.HexNumber), byte.Parse(separated[4], NumberStyles.HexNumber), byte.Parse(separated[5], NumberStyles.HexNumber), this);
+                    _state = new States.Solid(byte.Parse(separated[4], NumberStyles.HexNumber), byte.Parse(separated[5], NumberStyles.HexNumber), byte.Parse(separated[6], NumberStyles.HexNumber), this);
                     break;
                 case "1":
                     _state = new States.Gradient(byte.Parse(separated[3], NumberStyles.HexNumber), 
-                        byte.Parse(separated[4], NumberStyles.HexNumber), 
-                        byte.Parse(separated[5], NumberStyles.HexNumber),
+                        byte.Parse(separated[5], NumberStyles.HexNumber), 
                         byte.Parse(separated[6], NumberStyles.HexNumber),
-                        byte.Parse(separated[7], NumberStyles.HexNumber), 
+                        byte.Parse(separated[7], NumberStyles.HexNumber),
+                        byte.Parse(separated[8], NumberStyles.HexNumber), 
                         this);
                     break;
             }

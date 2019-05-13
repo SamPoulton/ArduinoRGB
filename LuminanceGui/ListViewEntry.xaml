@@ -10,5 +10,6 @@
         <Label x:Name="DeviceName" Content="Test Device" Foreground="White" FontSize="18"/>
         <Label x:Name="ParentName" Content="COM1" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <Label x:Name="IndexName" Content="Index 0" Foreground="White" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Bottom" RenderTransformOrigin="1,0.5" FlowDirection="RightToLeft"/>
+        <Label x:Name="EndpointType" Content="Standard" Foreground="White" FontSize="14" HorizontalAlignment="Right" RenderTransformOrigin="1,0.5" FlowDirection="RightToLeft"/>
     </Grid>
 </UserControl>

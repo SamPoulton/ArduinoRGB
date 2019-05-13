@@ -1,7 +1,8 @@
 #include <String.h>
 #include <EEPROM.h>
+#include <Adafruit_NeoPixel.h>
 const int BAUD_RATE = 9600;
-const char DEVICE_NAME[] = "Test ESP8266";
+const char DEVICE_NAME[] = "Test Arduino";
 
 // EEPROM addresses
 class memoryOffsets {
@@ -19,16 +20,32 @@ public:
 
 class rgbEndpoint {
 public:
-	int redPin, greenPin, bluePin, eepromLoc, currenthue;
+	int redPin, greenPin, bluePin, dataPin, ledCount, eepromLoc, currenthue;
 	unsigned long lastTime = 0;
 	String endpointName;
-	bool gradientDirection;
+	bool gradientDirection, isAddressable;
+	Adafruit_NeoPixel strip;
 	rgbEndpoint(int redpin, int greenpin, int bluepin, char endpointname[], int memoryOffset) {
 		redPin = redpin;
 		greenPin = greenpin;
 		bluePin = bluepin;
 		endpointName = endpointname;
 		eepromLoc = memoryOffset;
+		isAddressable = false;
+		if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 0) {
+			analogWrite(redPin, EEPROM.read(eepromLoc + memoryOffsets::RED_LOC));
+			analogWrite(greenPin, EEPROM.read(eepromLoc + memoryOffsets::GREEN_LOC));
+			analogWrite(bluePin, EEPROM.read(eepromLoc + memoryOffsets::BLUE_LOC));
+		}
+	}
+
+	rgbEndpoint(int datapin, int ledcount, char endpointname[], int memoryOffset) {
+		dataPin = datapin;
+		endpointName = endpointname;
+		eepromLoc = memoryOffset;
+		isAddressable = true;
+		strip = Adafruit_NeoPixel(ledcount, datapin, NEO_GRB + NEO_KHZ800);
+		strip.begin();
 		if (EEPROM.read(eepromLoc + memoryOffsets::MODE_LOC) == 0) {
 			analogWrite(redPin, EEPROM.read(eepromLoc + memoryOffsets::RED_LOC));
 			analogWrite(greenPin, EEPROM.read(eepromLoc + memoryOffsets::GREEN_LOC));
@@ -51,14 +68,26 @@ public:
 			lastTime = millis();
 		}
 	}
+
+	void writeToLeds(byte red, byte green, byte blue) {
+		if (isAddressable) {
+			for (int x = 0; x < strip.numPixels(); x++) {
+				strip.setPixelColor(x, red, green, blue);
+			}
+			strip.show();
+		}
+		else {
+			analogWrite(redPin, red);
+			analogWrite(greenPin, green);
+			analogWrite(bluePin, blue);
+		}
+	}
 	void setLedRgb(byte red, byte green, byte blue) {
 		EEPROM.write(eepromLoc + memoryOffsets::MODE_LOC, 0);
 		EEPROM.write(eepromLoc + memoryOffsets::RED_LOC, red);
 		EEPROM.write(eepromLoc + memoryOffsets::GREEN_LOC, green);
 		EEPROM.write(eepromLoc + memoryOffsets::BLUE_LOC, blue);
-		analogWrite(redPin, red);
-		analogWrite(greenPin, green);
-		analogWrite(bluePin, blue);
+		writeToLeds(red, green, blue);
 	}
 
 	void setGradient(byte hue1, byte hue2, byte saturation, byte value, byte fadespeed) {
@@ -69,7 +98,7 @@ public:
 		EEPROM.write(eepromLoc + memoryOffsets::VAL_LOC, value);
 		EEPROM.write(eepromLoc + memoryOffsets::SPEED_LOC, 255 - fadespeed);
 		setLedHsl(hue1, saturation, value);
-    currenthue = hue1;
+		currenthue = hue1;
 	}
 
 	void setLedHsl(byte h, byte s, byte v) {
@@ -85,34 +114,22 @@ public:
 
 		switch (i) {
 		case 0:
-			analogWrite(redPin, v);
-			analogWrite(greenPin, tv);
-			analogWrite(bluePin, pv);
+			writeToLeds(v, tv, pv);
 			break;
 		case 1:
-			analogWrite(redPin, qv);
-			analogWrite(greenPin, v);
-			analogWrite(bluePin, pv);
+			writeToLeds(qv, v, pv);
 			break;
 		case 2:
-			analogWrite(redPin, pv);
-			analogWrite(greenPin, v);
-			analogWrite(bluePin, tv);
+			writeToLeds(pv, v, tv);
 			break;
 		case 3:
-			analogWrite(redPin, pv);
-			analogWrite(greenPin, qv);
-			analogWrite(bluePin, v);
+			writeToLeds(pv, qv, v);
 			break;
 		case 4:
-			analogWrite(redPin, tv);
-			analogWrite(greenPin, pv);
-			analogWrite(bluePin, v);
+			writeToLeds(tv, pv, v);
 			break;
 		case 5:
-			analogWrite(redPin, v);
-			analogWrite(greenPin, pv);
-			analogWrite(bluePin, qv);
+			writeToLeds(v, pv, qv);
 			break;
 		}
 
@@ -120,9 +137,9 @@ public:
 };
 
 rgbEndpoint endpoints[2] = {
-rgbEndpoint(1, 2, 3, "Header 1", 0),
-// 5, 6, 3
-rgbEndpoint(5, 6, 7, "Header 2", 9) };
+rgbEndpoint(9, 10, 11, "Header 1", 0),
+// rgbEndpoint(5, 6, 7, "Header 2", 9),
+rgbEndpoint(13, 30, "Strip 1", 18)};
 // 10, 11, 9
 String dataBuffer = "";
 
@@ -152,7 +169,12 @@ void parseInstruction(String data) {
 			Serial.print(endpoints[i].endpointName.c_str());
 			Serial.print("&");
 			Serial.print(i, DEC);
-			Serial.print("&");
+			if (endpoints[i].isAddressable) {
+				Serial.print("&1&");
+			}
+			else {
+				Serial.print("&0&");
+			}
 			if (EEPROM.read(endpoints[i].eepromLoc + memoryOffsets::MODE_LOC) == 1) {
 				Serial.print(1, DEC);
 				Serial.print("&");
@@ -179,9 +201,10 @@ void parseInstruction(String data) {
 		Serial.print(";");
 	}
 	else if (data[0] == '2') {
+		Serial.print("OK;");
 		int endpointIndex = data[2] - '0';
 		if (data[1] == '0') {
-			EEPROM.write(memoryOffsets::MODE_LOC, 0);
+			EEPROM.write(endpoints[endpointIndex].eepromLoc + memoryOffsets::MODE_LOC, 0);
 			char redStr[3], greenStr[3], blueStr[3];
 			data.substring(3, 5).toCharArray(redStr, 3);
 			data.substring(5, 7).toCharArray(greenStr, 3);
@@ -192,7 +215,6 @@ void parseInstruction(String data) {
 			int blueValue = StrToHex(blueStr);
 
 			endpoints[endpointIndex].setLedRgb(redValue, greenValue, blueValue);
-			Serial.print("OK;");
 		}
 		else if (data[1] == '1') {
 			char hue1Str[3], hue2Str[3], satStr[3], valStr[3], speedStr[3];
@@ -207,9 +229,9 @@ void parseInstruction(String data) {
 			int satValue = StrToHex(satStr);
 			int valValue = StrToHex(valStr);
 			int speedValue = StrToHex(speedStr);
-      if (speedValue ==0) speedValue++;
+			if (speedValue ==0) speedValue++;
+			
 			endpoints[endpointIndex].setGradient(hue1Value, hue2Value, satValue, valValue, speedValue);
-			Serial.print("OK;");
 		}
 	}
 }

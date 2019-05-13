@@ -30,6 +30,16 @@ namespace LuminanceGui
             DeviceName.Content = endpoint.Name;
             ParentName.Content = endpoint.Parent.DeviceName;
             IndexName.Content = "Index " + endpoint.Index;
+            if (endpoint.IsAddressable)
+            {
+                EndpointType.Content = "Addressable";
+                EndpointType.Foreground = new SolidColorBrush(Colors.Aquamarine);
+            }
+            else
+            {
+                EndpointType.Content = "Standard";
+                EndpointType.Foreground = new SolidColorBrush(Colors.MediumPurple);
+            }
         }
     }
 }
