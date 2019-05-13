@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{280C5882-1846-4D78-AE2D-0D36884EB963}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ArduinoRGBLib</RootNamespace>
-    <AssemblyName>ArduinoRGBLib</AssemblyName>
+    <RootNamespace>LuminanceLib</RootNamespace>
+    <AssemblyName>LuminanceLib</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -52,7 +52,6 @@
     <Compile Include="RgbDevice.cs" />
     <Compile Include="RgbDeviceManager.cs" />
     <Compile Include="RgbStates.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -61,6 +60,9 @@
     <Content Include="ArduinoRGBConfig.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

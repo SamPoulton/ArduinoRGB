@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,6 +37,7 @@ namespace LuminanceLib
                 Port.BaudRate = 9600;
                 Port.Handshake = Handshake.None;
                 Port.ReadTimeout = 500;
+                Port.WriteTimeout = 500;
                 Port.Open();
             }
             catch (Exception ex) when (ex is NullReferenceException || ex is FormatException || ex is IOException)
@@ -44,7 +46,15 @@ namespace LuminanceLib
             }
             // actually communicate with the device
 
-            SendMessage(new InitialiseCommMessage());
+            try
+            {
+                SendMessage(new InitialiseCommMessage());
+            }
+            catch (TimeoutException)
+            {
+                throw new NotADeviceException();
+            }
+
             string response = ReceiveMessage();
 
             if (response != "OK") throw new NotADeviceException();
