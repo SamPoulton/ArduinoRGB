@@ -1,6 +1,7 @@
 #include <String.h>
 #include <EEPROM.h>
 #include <Adafruit_NeoPixel.h>
+#include "SparkFun_Tlc5940.h"
 const int BAUD_RATE = 9600;
 const char DEVICE_NAME[] = "Room Lighting";
 
@@ -77,9 +78,10 @@ public:
 			strip.show();
 		}
 		else {
-			analogWrite(redPin, red);
-			analogWrite(greenPin, green);
-			analogWrite(bluePin, blue);
+			Tlc.set(redPin, red * 16);
+			Tlc.set(greenPin, green * 16);
+			Tlc.set(bluePin, blue * 16);
+      Tlc.update();
 		}
 	}
 	void setLedRgb(byte red, byte green, byte blue) {
@@ -137,7 +139,7 @@ public:
 };
 
 rgbEndpoint endpoints[1] = {
-rgbEndpoint(9, 10, 11, "IKEA Lights", 0)
+rgbEndpoint(0, 1, 2, "IKEA Lights", 0)
 // rgbEndpoint(5, 6, 7, "Header 2", 9),
 // 10, 11, 9
 };
@@ -239,6 +241,7 @@ void parseInstruction(String data) {
 void setup() {
 	Serial.begin(BAUD_RATE);
 	Serial.setTimeout(100);
+  Tlc.init();
 }
 void loop() {
 	if (Serial.available()) {
