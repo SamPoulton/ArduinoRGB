@@ -1,3 +1,6 @@
+# Archived
+This was one of my first proper C# projects. I wrote it as a kid and don't use windows anymore.
+
 # LuminanceRGB
 Luminance is an RGB platform, originally designed for use inside computers but will work with anything. It's designed to be a simple, resource-friendly and user-friendly way to control RGB lights, but also open and easily customisable to fit your needs. It doesn't need to constantly run on your system, and as a result uses very little CPU time and resources. Here the system is implemented with C# and an Arduino, but the underlying protocol is open and available on the wiki for anyone to implement.
 
